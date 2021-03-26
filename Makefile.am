@@ -89,6 +89,7 @@ csharp_EXTRA_DIST=                                                           \
   csharp/src/Google.Protobuf.Benchmarks/BenchmarkDatasetConfig.cs            \
   csharp/src/Google.Protobuf.Benchmarks/BenchmarkMessage1Proto3.cs           \
   csharp/src/Google.Protobuf.Benchmarks/Benchmarks.cs                        \
+  csharp/src/Google.Protobuf.Benchmarks/ByteStringBenchmark.cs               \
   csharp/src/Google.Protobuf.Benchmarks/Google.Protobuf.Benchmarks.csproj    \
   csharp/src/Google.Protobuf.Benchmarks/GoogleMessageBenchmark.cs            \
   csharp/src/Google.Protobuf.Benchmarks/ParseMessagesBenchmark.cs            \
@@ -171,6 +172,7 @@ csharp_EXTRA_DIST=                                                           \
   csharp/src/Google.Protobuf.sln                                             \
   csharp/src/Google.Protobuf/ByteArray.cs                                    \
   csharp/src/Google.Protobuf/ByteString.cs                                   \
+  csharp/src/Google.Protobuf/ByteStringAsync.cs                              \
   csharp/src/Google.Protobuf/CodedInputStream.cs                             \
   csharp/src/Google.Protobuf/CodedOutputStream.ComputeSize.cs                \
   csharp/src/Google.Protobuf/CodedOutputStream.cs                            \
@@ -268,7 +270,8 @@ csharp_EXTRA_DIST=                                                           \
   csharp/src/Google.Protobuf/WriteContext.cs                                 \
   csharp/src/Google.Protobuf/WriteBufferHelper.cs                            \
   csharp/src/Google.Protobuf/UnknownField.cs                                 \
-  csharp/src/Google.Protobuf/UnknownFieldSet.cs
+  csharp/src/Google.Protobuf/UnknownFieldSet.cs                              \
+  csharp/src/Google.Protobuf/UnsafeByteOperations.cs
 
 java_EXTRA_DIST=                                                                   \
   java/README.md                                                                   \
@@ -526,7 +529,6 @@ java_EXTRA_DIST=                                                                
   java/core/src/test/proto/com/google/protobuf/test_check_utf8.proto               \
   java/core/src/test/proto/com/google/protobuf/test_check_utf8_size.proto          \
   java/core/src/test/proto/com/google/protobuf/test_custom_options.proto           \
-  java/core/src/test/proto/com/google/protobuf/test_extra_interfaces.proto         \
   java/core/src/test/proto/com/google/protobuf/wrappers_test.proto                 \
   java/lite.md                                                                     \
   java/lite/BUILD                                                                  \
@@ -1091,17 +1093,21 @@ ruby_EXTRA_DIST=                                                             \
   ruby/compatibility_tests/v3.0.0/test.sh                                    \
   ruby/compatibility_tests/v3.0.0/Rakefile                                   \
   ruby/compatibility_tests/v3.0.0/README.md                                  \
+  ruby/ext/google/protobuf_c/convert.c                                       \
+  ruby/ext/google/protobuf_c/convert.h                                       \
   ruby/ext/google/protobuf_c/defs.c                                          \
-  ruby/ext/google/protobuf_c/encode_decode.c                                 \
+  ruby/ext/google/protobuf_c/defs.h                                          \
   ruby/ext/google/protobuf_c/extconf.rb                                      \
   ruby/ext/google/protobuf_c/map.c                                           \
+  ruby/ext/google/protobuf_c/map.h                                           \
   ruby/ext/google/protobuf_c/message.c                                       \
+  ruby/ext/google/protobuf_c/message.h                                       \
   ruby/ext/google/protobuf_c/protobuf.c                                      \
   ruby/ext/google/protobuf_c/protobuf.h                                      \
   ruby/ext/google/protobuf_c/repeated_field.c                                \
-  ruby/ext/google/protobuf_c/storage.c                                       \
-  ruby/ext/google/protobuf_c/upb.c                                           \
-  ruby/ext/google/protobuf_c/upb.h                                           \
+  ruby/ext/google/protobuf_c/repeated_field.h                                \
+  ruby/ext/google/protobuf_c/ruby-upb.c                                      \
+  ruby/ext/google/protobuf_c/ruby-upb.h                                      \
   ruby/ext/google/protobuf_c/wrap_memcpy.c                                   \
   ruby/google-protobuf.gemspec                                               \
   ruby/lib/google/protobuf/message_exts.rb                                   \
@@ -1112,13 +1118,15 @@ ruby_EXTRA_DIST=                                                             \
   ruby/src/main/java/com/google/protobuf/jruby/RubyBuilder.java              \
   ruby/src/main/java/com/google/protobuf/jruby/RubyDescriptor.java           \
   ruby/src/main/java/com/google/protobuf/jruby/RubyDescriptorPool.java       \
+  ruby/src/main/java/com/google/protobuf/jruby/RubyEnum.java                 \
   ruby/src/main/java/com/google/protobuf/jruby/RubyEnumBuilderContext.java   \
   ruby/src/main/java/com/google/protobuf/jruby/RubyEnumDescriptor.java       \
-  ruby/src/main/java/com/google/protobuf/jruby/RubyEnum.java                 \
   ruby/src/main/java/com/google/protobuf/jruby/RubyFieldDescriptor.java      \
+  ruby/src/main/java/com/google/protobuf/jruby/RubyFileBuilderContext.java   \
+  ruby/src/main/java/com/google/protobuf/jruby/RubyFileDescriptor.java       \
   ruby/src/main/java/com/google/protobuf/jruby/RubyMap.java                  \
-  ruby/src/main/java/com/google/protobuf/jruby/RubyMessageBuilderContext.java \
   ruby/src/main/java/com/google/protobuf/jruby/RubyMessage.java              \
+  ruby/src/main/java/com/google/protobuf/jruby/RubyMessageBuilderContext.java \
   ruby/src/main/java/com/google/protobuf/jruby/RubyOneofBuilderContext.java  \
   ruby/src/main/java/com/google/protobuf/jruby/RubyOneofDescriptor.java      \
   ruby/src/main/java/com/google/protobuf/jruby/RubyProtobuf.java             \
@@ -1139,6 +1147,8 @@ ruby_EXTRA_DIST=                                                             \
   ruby/tests/generated_code_proto2_test.rb                                   \
   ruby/tests/generated_code_proto2.proto                                     \
   ruby/tests/generated_code.proto                                            \
+  ruby/tests/multi_level_nesting_test.proto                                  \
+  ruby/tests/multi_level_nesting_test.rb                                     \
   ruby/tests/test_import_proto2.proto                                        \
   ruby/tests/test_import.proto                                               \
   ruby/tests/test_ruby_package_proto2.proto                                  \
@@ -1386,10 +1396,6 @@ EXTRA_DIST = $(@DIST_LANG@_EXTRA_DIST)   \
   examples/pubspec.yaml                  \
   protobuf.bzl                           \
   protobuf_deps.bzl                      \
-  python/release/wheel/build_wheel_manylinux.sh  \
-  python/release/wheel/Dockerfile                \
-  python/release/wheel/protobuf_optimized_pip.sh \
-  python/release/wheel/README.md         \
   third_party/six.BUILD                  \
   third_party/zlib.BUILD                 \
   third_party/wyhash/LICENSE             \

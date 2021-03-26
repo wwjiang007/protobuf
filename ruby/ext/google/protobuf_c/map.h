@@ -28,29 +28,39 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-// Author: Darick Tong (darick@google.com)
-syntax = "proto2";
+#ifndef RUBY_PROTOBUF_MAP_H_
+#define RUBY_PROTOBUF_MAP_H_
 
-package protobuf_unittest;
+#include <ruby/ruby.h>
 
-message Proto1 {
-  option experimental_java_message_interface =
-      "com.google.protobuf.ExtraInterfaces.HasBoolValue";
-  option experimental_java_message_interface =
-      "com.google.protobuf.ExtraInterfaces.HasStringValue<Proto1>";
-  option experimental_java_builder_interface =
-      "com.google.protobuf.ExtraInterfaces.HasStringValueBuilder"
-      "<Proto1, Builder>";
+#include "protobuf.h"
+#include "ruby-upb.h"
 
-  optional string string_value = 1;
-  optional bool bool_value = 2;
-  optional bytes byte_value = 3;
-  optional int32 int_value = 4;
-}
+// Returns a Ruby wrapper object for the given map, which will be created if
+// one does not exist already.
+VALUE Map_GetRubyWrapper(upb_map *map, upb_fieldtype_t key_type,
+                         TypeInfo value_type, VALUE arena);
 
-message Proto2 {
-  option experimental_java_message_interface =
-      "com.google.protobuf.ExtraInterfaces.HasBoolValue";
+// Gets the underlying upb_map for this Ruby map object, which must have
+// key/value type that match |field|. If this is not a map or the type doesn't
+// match, raises an exception.
+const upb_map *Map_GetUpbMap(VALUE val, const upb_fielddef *field);
 
-  optional bool bool_value = 1;
-}
+// Implements #inspect for this map by appending its contents to |b|.
+void Map_Inspect(StringBuilder *b, const upb_map *map, upb_fieldtype_t key_type,
+                 TypeInfo val_type);
+
+// Returns a new Hash object containing the contents of this Map.
+VALUE Map_CreateHash(const upb_map* map, upb_fieldtype_t key_type,
+                     TypeInfo val_info);
+
+// Returns a deep copy of this Map object.
+VALUE Map_deep_copy(VALUE obj);
+
+// Ruby class of Google::Protobuf::Map.
+extern VALUE cMap;
+
+// Call at startup to register all types in this module.
+void Map_register(VALUE module);
+
+#endif  // RUBY_PROTOBUF_MAP_H_

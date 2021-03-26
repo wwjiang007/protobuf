@@ -34,6 +34,8 @@
 #include <string>
 
 #include <google/protobuf/compiler/java/java_helpers.h>
+#include <google/protobuf/compiler/java/java_names.h>
+#include <google/protobuf/compiler/code_generator.h>
 #include <google/protobuf/stubs/substitute.h>
 
 namespace google {
@@ -66,6 +68,7 @@ std::string ClassNameWithoutPackage(const Descriptor* descriptor,
                                     bool immutable) {
   return StripPackageName(descriptor->full_name(), descriptor->file());
 }
+
 
 // Get the name of an enum's Java class without package name prefix.
 std::string ClassNameWithoutPackage(const EnumDescriptor* descriptor,
