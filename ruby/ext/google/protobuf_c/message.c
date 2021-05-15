@@ -697,16 +697,13 @@ bool Message_Equal(const upb_msg *m1, const upb_msg *m2, const upb_msgdef *m) {
  * field is of a primitive type).
  */
 static VALUE Message_eq(VALUE _self, VALUE _other) {
-  if (TYPE(_self) != TYPE(_other)) {
-    return Qfalse;
-  }
+  if (CLASS_OF(_self) != CLASS_OF(_other)) return Qfalse;
 
   Message* self = ruby_to_Message(_self);
   Message* other = ruby_to_Message(_other);
+  assert(self->msgdef == other->msgdef);
 
-  return Message_Equal(self->msg, other->msg, self->msgdef)
-             ? Qtrue
-             : Qfalse;
+  return Message_Equal(self->msg, other->msg, self->msgdef) ? Qtrue : Qfalse;
 }
 
 uint64_t Message_Hash(const upb_msg* msg, const upb_msgdef* m, uint64_t seed) {
@@ -737,7 +734,10 @@ uint64_t Message_Hash(const upb_msg* msg, const upb_msgdef* m, uint64_t seed) {
  */
 static VALUE Message_hash(VALUE _self) {
   Message* self = ruby_to_Message(_self);
-  return INT2FIX(Message_Hash(self->msg, self->msgdef, 0));
+  uint64_t hash_value = Message_Hash(self->msg, self->msgdef, 0);
+  // RUBY_FIXNUM_MAX should be one less than a power of 2.
+  assert((RUBY_FIXNUM_MAX & (RUBY_FIXNUM_MAX + 1)) == 0);
+  return INT2FIX(hash_value & RUBY_FIXNUM_MAX);
 }
 
 /*
